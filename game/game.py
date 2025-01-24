@@ -40,8 +40,8 @@ class DiceGame:
     def throw_dice(self, dice, player):
         secret_key = self.random_generator.generate_random_bytes(32)
         throw_index = self.random_generator.generate_random_int(len(dice.faces))
-        throw_value = dice.faces[throw_index]
-        hmac_value = self.random_generator.compute_hmac(secret_key, str(throw_value))
+        #throw_value = dice.faces[throw_index]
+        hmac_value = self.random_generator.compute_hmac(secret_key, str(throw_index))
         print(f"HMAC for dice throw: {hmac_value}")
 
         modulo_choice = None
@@ -65,12 +65,13 @@ class DiceGame:
                 except ValueError:
                     print("Invalid input. Try again.")
 
-        print(f"The dice throw: {throw_value}")
+        print(f"The dice throw: {throw_index}")
         print(f"Secret key: {secret_key.hex()}")
 
-        result = (modulo_choice + throw_value) % len(dice.faces)
-        print(f"The result is {modulo_choice} + {throw_value} % {len(dice.faces)} = {result}")
-        return result
+        result = (modulo_choice + throw_index) % len(dice.faces)
+        print(f"The result is {modulo_choice} + {throw_index} % {len(dice.faces)} = {result}")
+        print(f"{dice.faces}[{result}] = {dice.faces[result]}")
+        return dice.faces[result]
 
     def play(self):
         self.full_dice_list = self.dice_parser.parse_dice_parameters(sys.argv[1:])
